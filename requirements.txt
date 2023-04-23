@@ -22,6 +22,6 @@ urllib3==1.26.15
 smmap==5.0.0
 scipy==1.10.0
 rich==13.3.4
-bs4==4.12.1
+bs4==4.12.0
 whisper==1.1.10
 pandas==1.5.3
