@@ -19,3 +19,10 @@ tqdm==4.65.0
 transformers==4.28.1
 typing_extensions==4.5.0
 urllib3==1.26.15
+torch==1.12.1
+smmap==5.0.0
+scipy==1.10.0
+rich==13.3.4
+bs4==4.11.1
+whisper==1.1.10
+pandas==1.5.3
