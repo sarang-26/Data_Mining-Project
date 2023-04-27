@@ -25,8 +25,10 @@ elif option == 'Product Chatbot':
     image = st.image('bert-model-calssification-output-vector-cls.png')
     description = st.text_area("Enter about this product information")
     question=st.text_area("Enter the question")
-    answer=get_answer(question,description)
-    st.write(answer)
+    if st.button('Submit'):
+        
+        answer=get_answer(question,description)
+        st.write(answer)
 
     
 
