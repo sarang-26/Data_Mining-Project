@@ -16,8 +16,10 @@ option = st.sidebar.selectbox(
 
 if option == 'Top Reviews':
     url = st.text_area("Enter the url for the product")
-    df=get_top_review(url)
-    st.table(df)
+    if st.button('Submit'):
+        df=get_top_review(url)
+        st.table(df)
+        
 elif option == 'Product Chatbot':
     # insert image in streamlit
     image = st.image('bert-model-calssification-output-vector-cls.png')
