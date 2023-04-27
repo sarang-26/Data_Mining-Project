@@ -25,3 +25,4 @@ rich==13.3.4
 whisper==1.1.10
 pandas==1.5.3
 beautifulsoup4==4.11.1
+wordcloud==1.8.2.2
