@@ -2,6 +2,11 @@ from bs4 import BeautifulSoup as bs
 import requests
 import pandas as pd
 from sentiment import get_sentiment
+from sklearn.feature_extraction.text import TfidfVectorizer
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+import streamlit as st
+
 
 
 def get_top_review(link):
@@ -47,5 +52,34 @@ def get_top_review(link):
 
     return df
 
+
+# A fucntion to get the word blob
+def get_word_cloud(df):
+    
+    
+
+    # Instantiate TfidfVectorizer
+    vectorizer = TfidfVectorizer(stop_words='english', max_features=50)
+
+    # Fit and transform the review data
+    tfidf_matrix = vectorizer.fit_transform(df)
+
+    # Create a DataFrame with the extracted keywords and their corresponding TF-IDF scores
+    keywords_df = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out())
+
+    # Calculate the total TF-IDF score for each keyword
+    keywords_score = keywords_df.sum(axis=0).sort_values(ascending=False)
+
+    # Create a word cloud using the extracted keywords and their TF-IDF scores
+    wordcloud = WordCloud(width=800, height=800, background_color='white')
+    wordcloud.generate_from_frequencies(keywords_score.to_dict())
+
+    # Display the word cloud on streamlit dashboard
+    st.title("Word Cloud")
+    st.image(wordcloud.to_array())
+
+    
+    
+    
 
 #https://www.amazon.in/Dabur-Honey-Sundarbans-500gm-Unprocessed-Antioxidants/product-reviews/B0BH8XP25J/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews
