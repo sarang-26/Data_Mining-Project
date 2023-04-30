@@ -2,7 +2,7 @@
 
 import streamlit as st
 #from extract_transcript import speech_to_text
-from extract_reviews import get_top_review, get_word_cloud
+from extract_reviews import get_top_review, get_word_cloud, plot_sentiment
 from product_QA import get_answer
 st.title('Amazon Product Chatbot')
 
@@ -20,6 +20,8 @@ if option == 'Top Reviews':
         df=get_top_review(url)
         st.table(df)
         get_word_cloud(df['Reviews'])
+        plot_sentiment(df)
+
         
 
    

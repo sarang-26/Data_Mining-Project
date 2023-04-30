@@ -6,6 +6,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import streamlit as st
+import re
+from datetime import datetime
+#import pycountry
+import plotly.express as px
+
 
 
 
@@ -33,12 +38,50 @@ def get_top_review(link):
     review_content = []
     for i in range(0,len(review)):
         review_content.append(review[i].get_text())
-
-
+    
     review_content[:] = [reviews.lstrip('\n') for reviews in review_content]
+
+
+    review_dates= soup.find_all("span",{"data-hook":"review-date"})
+
+    review_date = []
+    for i in range(0,len(review_dates)):
+        date_match = re.search(r"\b\d{1,2}\s[A-Za-z]+\s\d{4}\b", review_dates[i].get_text())
+        if date_match:
+            date_str = date_match.group()
+            date_obj = datetime.strptime(date_str, "%d %B %Y")
+            date_obj = date_obj.date()
+            review_date.append(date_obj)
+        else:
+             print("No date found")
+             review_date.append("No date found")
+
+
+    
+
+    
+
+  
+
+    # Extract country
+    # words = text.split()
+    # country_name = None
+
+    # for word in words:
+    #     word = re.sub(r'\W+', '', word)  # Remove any non-alphanumeric characters
+    #     try:
+    #         country = pycountry.countries.lookup(word)
+    #         country_name = country.name
+    #         break
+    #     except LookupError:
+    #         continue
+
+    # print(country_name)
+
     
 
     df = pd.DataFrame()
+    df['Review date']=review_date[0:10]
     df['Review title']=review_title[0:10]
     df['Ratings']=rate[0:10]
     df['Reviews']=review_content[0:10]
@@ -75,11 +118,31 @@ def get_word_cloud(df):
     wordcloud.generate_from_frequencies(keywords_score.to_dict())
 
     # Display the word cloud on streamlit dashboard
-    st.title("Word Cloud")
+    st.title("KeyWord Extraction")
     st.image(wordcloud.to_array())
 
-    
+
+# A function to plot sentiment along time
+def plot_sentiment(df):
+    # Create a Plotly line chart
+    fig = px.scatter(df, x="Review date", y="Sentiment score", title="Sentiment Scores Over Time")
+    #fig = px.line(df, x="Review date", y="Sentiment score", title="Sentiment Scores Over Time")
+    fig.update_xaxes(title="Date")
+    fig.update_yaxes(title="Sentiment Score")
+
+    # Set the chart theme and layout
+    fig.update_layout(
+        template="plotly_dark",
+        margin=dict(l=50, r=50, t=100, b=50),
+        showlegend=False,
+    )
+
+    # Display the chart in the Streamlit app
+    st.title("Temporal Sentiment Analysis")
+    st.plotly_chart(fig)
+        
     
     
 
 #https://www.amazon.in/Dabur-Honey-Sundarbans-500gm-Unprocessed-Antioxidants/product-reviews/B0BH8XP25J/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews
+#https://www.amazon.in/Redmi-Lavender-Storage-Performance-Mediatek/product-reviews/B0BYN5555J/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews
