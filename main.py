@@ -4,7 +4,7 @@ import streamlit as st
 #from extract_transcript import speech_to_text
 from extract_reviews import get_top_review, get_word_cloud, plot_sentiment
 from product_QA import get_answer
-st.title('Amazon Product Chatbot')
+st.title('Amazon Product Review Analysis')
 
 #create a streamlit text box for writing the text for the user
 
@@ -18,9 +18,19 @@ if option == 'Top Reviews':
     url = st.text_area("Enter the url for the product")
     if st.button('Submit'):
         df=get_top_review(url)
-        st.table(df)
-        get_word_cloud(df['Reviews'])
-        plot_sentiment(df)
+        tab1, tab2, tab3 = st.tabs(["🗃 Data","📈 Temporal Sentiment Analysis", "📊 Keyword Extraction"])
+        tab1.subheader("Extracted Data")
+        tab2.subheader("Sentiment Trend Analysis")
+        tab3.subheader("Keyword Extraction")
+        with tab1:
+
+            st.table(df)
+        with tab2:
+            plot_sentiment(df)
+        with tab3:
+            get_word_cloud(df['Reviews'])
+
+        
 
         
 
