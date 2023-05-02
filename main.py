@@ -5,6 +5,10 @@ import streamlit as st
 from extract_reviews import get_top_review, get_word_cloud, plot_sentiment
 from product_QA import get_answer
 st.title('Amazon Product Review Analysis')
+st.write("Key Features of Applications:")
+st.markdown("1. Extract top reviews from the product page")
+st.markdown("2. Temporal Sentiment Analysis")
+st.markdown("3. Keyword Extraction")
 
 #create a streamlit text box for writing the text for the user
 
